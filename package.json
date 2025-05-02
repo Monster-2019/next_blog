@@ -68,7 +68,7 @@
   },
   "lint-staged": {
     "*.+(js|jsx|ts|tsx)": [
-      "eslint --fix"
+      "eslint --fix --config eslint.config.mjs"
     ],
     "*.+(js|jsx|ts|tsx|json|css|md|mdx)": [
       "prettier --write"
