@@ -11,6 +11,7 @@ import Footer from '@/components/Footer'
 import siteMetadata from '@/data/siteMetadata'
 import { ThemeProviders } from './theme-providers'
 import { Metadata } from 'next'
+import Script from 'next/script'
 
 const space_grotesk = Space_Grotesk({
   subsets: ['latin'],
@@ -58,6 +59,22 @@ export const metadata: Metadata = {
   },
 }
 
+const BaiduTongji = ({ baiduId }: { baiduId: string }) => {
+  return (
+    <Script id="bt-script">
+      {`var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?${baiduId}";
+      var s = document.getElementsByTagName("script")[0]; 
+      s.parentNode.insertBefore(hm, s);
+    })();`}
+    </Script>
+  )
+}
+
+const isProduction = process.env.NODE_ENV === 'production'
+
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   const basePath = process.env.BASE_PATH || ''
 
@@ -97,6 +114,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className="bg-white pl-[calc(100vw-100%)] text-black antialiased dark:bg-gray-950 dark:text-white">
         <ThemeProviders>
           <Analytics analyticsConfig={siteMetadata.analytics as AnalyticsConfig} />
+          {isProduction && siteMetadata.baidu && (
+            <BaiduTongji baiduId={siteMetadata.baidu as string} />
+          )}
           <SectionContainer>
             <SearchProvider searchConfig={siteMetadata.search as SearchConfig}>
               <Header />
