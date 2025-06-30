@@ -57,6 +57,9 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     images: [siteMetadata.socialBanner],
   },
+  other: {
+    'baidu-site-verification': 'codeva-fnWxlKscnT',
+  },
 }
 
 const BaiduTongji = ({ baiduId }: { baiduId: string }) => {
