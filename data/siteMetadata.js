@@ -3,7 +3,8 @@ const siteMetadata = {
   title: 'Monster Cone Blog',
   author: 'Monster Cone',
   headerTitle: 'MonsterCone',
-  description: '',
+  description:
+    'Monster Cone 的技术与生活博客，分享编程技巧、项目经验、工具使用心得以及个人生活随笔。',
   language: 'zh-cn',
   theme: 'system', // system, dark or light
   siteUrl: 'https://blog.dongxin.co',
