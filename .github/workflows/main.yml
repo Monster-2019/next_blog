@@ -64,9 +64,9 @@ jobs:
             - name: run-latest-docker-image
               uses: appleboy/ssh-action@master
               with:
-                  host: ${{ secrets.HOST }}
-                  username: root
-                  password: ${{ secrets.PASSWORD }}
-                  script: |
-                      sudo docker compose -f /opt/compose/blog/docker-compose.yml pull blog
-                      sudo docker compose -f /opt/compose/blog/docker-compose.yml up -d --build blog
+                    host: ${{ secrets.HOST }}
+                    username: ${{ secrets.USERNAME }}
+                    key: ${{ secrets.SSH_PRIVATE_KEY }}
+                    script: |
+                        sudo docker compose -f /opt/compose/blog/docker-compose.yml pull blog
+                        sudo docker compose -f /opt/compose/blog/docker-compose.yml up -d --build blog
