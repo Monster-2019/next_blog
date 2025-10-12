@@ -1,4 +1,10 @@
 {
+  "cloudflare-workers": 2,
+  "fcm": 2,
+  "firebase": 2,
+  "kv-storage": 2,
+  "serverless": 2,
+  "hono": 2,
   "zustand": 1,
   "indexeddb": 1,
   "前端状态管理": 1,
