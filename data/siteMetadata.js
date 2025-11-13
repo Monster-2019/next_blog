@@ -7,7 +7,7 @@ const siteMetadata = {
     'Monster Cone 的技术与生活博客，分享编程技巧、项目经验、工具使用心得以及个人生活随笔。',
   language: 'zh-cn',
   theme: 'system', // system, dark or light
-  siteUrl: 'https://blog.dongxin.co',
+  siteUrl: 'https://blog.dxin.cc',
   siteRepo: 'https://github.com/Monster-2019/next_blog',
   siteLogo: `${process.env.BASE_PATH || ''}/static/images/logo.jpg`,
   socialBanner: `${process.env.BASE_PATH || ''}/static/images/twitter-card.png`,
