@@ -128,9 +128,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <Footer />
           </SectionContainer>
         </ThemeProviders>
+        <Script
+          async
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6148957396839363"
+          crossOrigin="anonymous"
+          strategy="afterInteractive"
+        />
       </body>
-      <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6148957396839363"
-     crossorigin="anonymous"></script>
     </html>
   )
 }
