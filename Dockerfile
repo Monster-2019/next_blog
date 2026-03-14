@@ -59,9 +59,9 @@ RUN addgroup --system --gid 1001 nodejs && \
     adduser --system --uid 1001 nextjs
 
 # 复制构建后的生产文件
-COPY --from=builder /app/public ./public
-COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./standalone
-COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./static
+COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./ 
+COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
+COPY --from=builder --chown=nextjs:nodejs /app/public ./public
 
 # 配置运行时环境变量
 ARG NEXT_PUBLIC_GISCUS_REPO
