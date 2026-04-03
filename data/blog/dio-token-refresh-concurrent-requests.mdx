@@ -1,8 +1,8 @@
----
-title: 'Dio 并发请求下刷新 Token 的处理方案'
-date: 2025-10-12
-tags: ['Flutter', 'Dio', 'Completer']
-summary: 本文介绍在 Flutter 使用 Dio 时，如何处理高并发请求下的 Token 刷新问题。通过使用 Completer 挂起请求队列，实现只触发一次刷新 Token，并让其他请求等待新 Token 后重新发起请求。
+﻿---
+title: 'Flutter Dio 并发请求 Token 刷新处理方案'
+date: 2026-04-04
+tags: ['Flutter', 'Dio', 'Token Refresh', 'Completer']
+summary: 介绍 Flutter 使用 Dio 时，如何在高并发请求下只触发一次 Token 刷新，并通过 Completer 挂起等待中的请求队列。
 ---
 
 在高频访问场景中，通常使用 **滚动令牌** 保持用户的长时间登录状态。但是在多个并发请求同时触发 Token 刷新时，容易出现 **重复刷新或刷新失败** 的情况：第一个请求成功刷新了 Token，后续请求仍使用旧 Token，导致刷新失败。
