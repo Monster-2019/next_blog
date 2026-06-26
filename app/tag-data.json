@@ -90,6 +90,8 @@
   "https": 1,
   "ssl": 1,
   "域名配置": 1,
+  "cloudflare-worker": 1,
+  "supabase": 1,
   "css": 1,
   "动画": 1,
   "前端技巧": 1,
