@@ -80,6 +80,24 @@ async function createTagCount(allBlogs) {
   writeFileSync('./app/tag-data.json', formatted)
 }
 
+async function createCategoryData(allBlogs) {
+  const categoryData: Record<string, { name: string; count: number }> = {}
+  allBlogs.forEach((file) => {
+    if (file.category && (!isProduction || file.draft !== true)) {
+      const categorySlug = slug(file.category)
+      if (categorySlug in categoryData) {
+        categoryData[categorySlug].count += 1
+      } else {
+        categoryData[categorySlug] = { name: file.category, count: 1 }
+      }
+    }
+  })
+  const formatted = await prettier.format(JSON.stringify(categoryData, null, 2), {
+    parser: 'json',
+  })
+  writeFileSync('./app/category-data.json', formatted)
+}
+
 function createSearchIndex(allBlogs) {
   if (
     siteMetadata?.search?.provider === 'kbar' &&
@@ -101,6 +119,7 @@ export const Blog = defineDocumentType(() => ({
     title: { type: 'string', required: true },
     date: { type: 'date', required: true },
     tags: { type: 'list', of: { type: 'string' }, default: [] },
+    category: { type: 'string' },
     lastmod: { type: 'date' },
     draft: { type: 'boolean' },
     summary: { type: 'string' },
@@ -121,6 +140,7 @@ export const Blog = defineDocumentType(() => ({
         datePublished: doc.date,
         dateModified: doc.lastmod || doc.date,
         description: doc.summary,
+        articleSection: doc.category,
         image: doc.images ? doc.images[0] : siteMetadata.socialBanner,
         url: `${siteMetadata.siteUrl}/${doc._raw.flattenedPath}`,
       }),
@@ -182,6 +202,7 @@ export default makeSource({
   onSuccess: async (importData) => {
     const { allBlogs } = await importData()
     createTagCount(allBlogs)
+    createCategoryData(allBlogs)
     createSearchIndex(allBlogs)
   },
 })

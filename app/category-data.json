@@ -1,0 +1,26 @@
+{
+  "ocr-与计算机视觉": {
+    "name": "OCR 与计算机视觉",
+    "count": 5
+  },
+  "前端开发": {
+    "name": "前端开发",
+    "count": 16
+  },
+  "后端与-serverless": {
+    "name": "后端与 Serverless",
+    "count": 5
+  },
+  "移动开发": {
+    "name": "移动开发",
+    "count": 4
+  },
+  "devops-与部署": {
+    "name": "DevOps 与部署",
+    "count": 3
+  },
+  "基础设施": {
+    "name": "基础设施",
+    "count": 4
+  }
+}
