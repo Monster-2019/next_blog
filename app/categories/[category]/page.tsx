@@ -1,5 +1,4 @@
 import { allCoreContent, sortPosts } from 'pliny/utils/contentlayer'
-import siteMetadata from '@/data/siteMetadata'
 import ListLayout from '@/layouts/ListLayoutWithCategories'
 import { allBlogs } from 'contentlayer/generated'
 import categoryData from 'app/category-data.json'
@@ -20,7 +19,7 @@ export async function generateMetadata(props: {
 
   return genPageMetadata({
     title: category?.name || categorySlug,
-    description: `${siteMetadata.title} ${category?.name || categorySlug} 分类文章`,
+    description: `阅读 Monster Cone Blog ${category?.name || categorySlug} 分类下的 ${category?.count || 0} 篇技术文章，整理相关实践经验、问题排查、工具使用和项目开发记录。`,
   })
 }
 

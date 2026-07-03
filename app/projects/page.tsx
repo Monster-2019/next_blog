@@ -2,7 +2,11 @@ import projectsData from '@/data/projectsData'
 import Card from '@/components/Card'
 import { genPageMetadata } from 'app/seo'
 
-export const metadata = genPageMetadata({ title: 'Projects' })
+export const metadata = genPageMetadata({
+  title: '项目',
+  description:
+    '查看 Monster Cone 的独立开发项目、技术实验和工程实践记录，包含前端工具、Web 应用、自动化服务与开发效率相关探索。',
+})
 
 export default function Projects() {
   return (

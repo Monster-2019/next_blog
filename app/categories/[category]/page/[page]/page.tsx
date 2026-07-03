@@ -2,6 +2,8 @@ import { allCoreContent, sortPosts } from 'pliny/utils/contentlayer'
 import ListLayout from '@/layouts/ListLayoutWithCategories'
 import { allBlogs } from 'contentlayer/generated'
 import categoryData from 'app/category-data.json'
+import { genPageMetadata } from 'app/seo'
+import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { slug } from 'github-slugger'
 
@@ -11,10 +13,26 @@ export const generateStaticParams = async () => {
   const categories = categoryData as Record<string, { name: string; count: number }>
   return Object.entries(categories).flatMap(([category, data]) => {
     const totalPages = Math.max(1, Math.ceil(data.count / POSTS_PER_PAGE))
-    return Array.from({ length: totalPages }, (_, i) => ({
+    return Array.from({ length: Math.max(0, totalPages - 1) }, (_, i) => ({
       category: encodeURI(category),
-      page: (i + 1).toString(),
+      page: (i + 2).toString(),
     }))
+  })
+}
+
+export async function generateMetadata(props: {
+  params: Promise<{ category: string; page: string }>
+}): Promise<Metadata> {
+  const params = await props.params
+  const categorySlug = decodeURI(params.category)
+  const categories = categoryData as Record<string, { name: string; count: number }>
+  const category = categories[categorySlug]
+  const pageNumber = parseInt(params.page)
+  const categoryName = category?.name || categorySlug
+
+  return genPageMetadata({
+    title: `${categoryName} - 第 ${pageNumber} 页`,
+    description: `阅读 Monster Cone Blog ${categoryName} 分类第 ${pageNumber} 页的技术文章，继续浏览相关开发经验、工具实践、问题排查和项目记录。`,
   })
 }
 
@@ -40,7 +58,7 @@ export default async function CategoryPage(props: {
   )
   const totalPages = Math.ceil(filteredPosts.length / POSTS_PER_PAGE)
 
-  if (pageNumber <= 0 || pageNumber > totalPages || isNaN(pageNumber)) {
+  if (pageNumber <= 1 || pageNumber > totalPages || isNaN(pageNumber)) {
     return notFound()
   }
 

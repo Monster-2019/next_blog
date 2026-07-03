@@ -10,12 +10,14 @@ interface PageSEOProps {
 }
 
 export function genPageMetadata({ title, description, image, ...rest }: PageSEOProps): Metadata {
+  const metaDescription = description || siteMetadata.description
+
   return {
     title,
-    description: description || siteMetadata.description,
+    description: metaDescription,
     openGraph: {
       title: `${title} | ${siteMetadata.title}`,
-      description: description || siteMetadata.description,
+      description: metaDescription,
       url: './',
       siteName: siteMetadata.title,
       images: image ? [image] : [siteMetadata.socialBanner],
@@ -24,6 +26,7 @@ export function genPageMetadata({ title, description, image, ...rest }: PageSEOP
     },
     twitter: {
       title: `${title} | ${siteMetadata.title}`,
+      description: metaDescription,
       card: 'summary_large_image',
       images: image ? [image] : [siteMetadata.socialBanner],
     },

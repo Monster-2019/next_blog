@@ -4,7 +4,8 @@ import categoryData from 'app/category-data.json'
 
 export const metadata = genPageMetadata({
   title: '分类',
-  description: '按主题浏览所有文章分类',
+  description:
+    '按主题浏览 Monster Cone Blog 的全部文章分类，快速找到前端开发、Next.js、Vue、Flutter、Cloudflare、部署运维与工程实践相关内容。',
 })
 
 export default async function Page() {

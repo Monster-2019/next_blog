@@ -14,6 +14,7 @@ const siteMetadata = {
 
   siteUrl: 'https://www.dxin.cc',
   siteRepo: 'https://github.com/Monster-2019/next_blog',
+  indexNowKey: '73f35cf4-6bf6-4a92-a86e-3de50a80bc76',
 
   siteLogo: `${process.env.BASE_PATH || ''}/static/images/logo.jpg`,
   socialBanner: `${process.env.BASE_PATH || ''}/static/images/twitter-card.png`,
