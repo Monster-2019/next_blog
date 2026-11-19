@@ -7,8 +7,6 @@
 [![Twitter URL](https://img.shields.io/twitter/url?style=social&url=https%3A%2F%2Ftwitter.com%2Ftimlrxx)](https://x.com/timlrxx)
 [![Sponsor](https://img.shields.io/static/v1?label=Sponsor&message=%E2%9D%A4&logo=GitHub&link=https://github.com/sponsors/timlrx)](https://github.com/sponsors/timlrx)
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/git/external?repository-url=https://github.com/timlrx/tailwind-nextjs-starter-blog)
-
 This is a [Next.js](https://nextjs.org/), [Tailwind CSS](https://tailwindcss.com/) blogging starter template. Version 2 is based on Next App directory with [React Server Component](https://nextjs.org/docs/getting-started/react-essentials#server-components) and uses [Contentlayer](https://www.contentlayer.dev/) to manage markdown content.
 
 Probably the most feature-rich Next.js markdown blogging template out there. Easily configurable and customizable. Perfect as a replacement to existing Jekyll and Hugo individual blogs.
@@ -187,7 +185,7 @@ npx degit 'timlrx/tailwind-nextjs-starter-blog'
 5. Modify `projectsData.ts`
 6. Modify `headerNavLinks.ts` to customize navigation links
 7. Add blog posts
-8. Deploy on Vercel
+8. Deploy to your server (see [Deploy](#deploy))
 
 ## Installation
 
@@ -288,13 +286,28 @@ canonicalUrl: https://tailwind-nextjs-starter-blog.vercel.app/blog/introducing-t
 
 ## Deploy
 
-### GitHub Pages
+### Server (Docker + GitHub Actions)
 
-A [`pages.yml`](.github/workflows/pages.yml) workflow is already provided. Simply select "GitHub Actions" in: `Settings > Pages > Build and deployment > Source`.
+Production deployment follows the same pattern as the FastPush project: GitHub Actions builds the Next.js standalone image, pushes it to Alibaba Cloud ACR, then connects to the server over SSH and restarts the Compose service.
 
-### Vercel
+1. On the server, create `/opt/compose/blog` and copy [`compose.server.yml`](compose.server.yml) there.
+2. Log in to ACR once on the server:
 
-The easiest way to deploy the template is to deploy on [Vercel](https://vercel.com). Check out the [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+   ```sh
+   sudo docker login registry.cn-hangzhou.aliyuncs.com
+   ```
+
+3. Start the service:
+
+   ```sh
+   cd /opt/compose/blog
+   sudo docker compose -f compose.server.yml pull blog
+   sudo docker compose -f compose.server.yml up -d blog
+   ```
+
+The container only exposes `127.0.0.1:3000`. Configure Nginx or Caddy to reverse-proxy the blog domain to `http://127.0.0.1:3000`.
+
+The `.github/workflows/blog-image.yml` workflow deploys automatically after a push to `main`. Configure these GitHub Actions secrets: `ACR_USERNAME`, `ACR_PASSWORD`, `SSH_HOST`, `SSH_USER`, `SSH_PASSWORD` (optional: `SSH_PORT`), and the `NEXT_PUBLIC_GISCUS_*` values if comments are enabled.
 
 ### Netlify
 

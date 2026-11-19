@@ -1,20 +1,20 @@
 # 使用 Node 20-alpine 作为基础镜像
 FROM node:20-alpine AS base
 
-# 安装必要的工具，只在构建阶段需要
-RUN apk add --no-cache g++ make py3-pip libc6-compat curl && \
-    npm i -g npm@latest
+# 安装必要的工具，只在构建阶段需要。使用 Node 20 自带的 npm，避免
+# npm@latest 提前要求更高版本的 Node.js。
+RUN apk add --no-cache g++ make py3-pip libc6-compat curl
 
-# ===== 依赖安装阶段：使用 npm install 适配跨平台环境 =====
+# ===== 依赖安装阶段：使用 lockfile 保证生产构建可复现 =====
 FROM base AS deps
 WORKDIR /app
 
 # 复制包配置文件（优先锁文件，保留缓存优化）
 COPY package.json yarn.lock* package-lock.json* pnpm-lock.yaml* .npmrc* ./
 
-# 使用 npm install 安装依赖
+# 使用 npm ci 安装依赖
 RUN npm cache clean --force && \
-    npm install --legacy-peer-deps && \
+    npm ci --legacy-peer-deps && \
     # 清理缓存，减小 deps 阶段镜像体积
     rm -rf ~/.npm/_cacache
 
@@ -59,7 +59,7 @@ RUN addgroup --system --gid 1001 nodejs && \
     adduser --system --uid 1001 nextjs
 
 # 复制构建后的生产文件
-COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./ 
+COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 COPY --from=builder --chown=nextjs:nodejs /app/public ./public
 
@@ -76,14 +76,14 @@ ENV NEXT_PUBLIC_GISCUS_CATEGORY=${NEXT_PUBLIC_GISCUS_CATEGORY}
 ENV NEXT_PUBLIC_GISCUS_CATEGORY_ID=${NEXT_PUBLIC_GISCUS_CATEGORY_ID}
 ENV NEXT_PUBLIC_GOOGLE_ANALYTICS_ID=${NEXT_PUBLIC_GOOGLE_ANALYTICS_ID}
 
-# 配置运行端口和主机
-ENV PORT=80
+# 配置运行端口和主机。非 root 用户不能绑定 80 端口。
+ENV PORT=3000
 ENV HOSTNAME=0.0.0.0
-EXPOSE 80
+EXPOSE 3000
 
 # 健康检查
 HEALTHCHECK --interval=30s --timeout=5s --retries=3 --start-period=10s \
-  CMD curl -f http://localhost:${PORT}/api/health || exit 1
+  CMD curl -fsS http://127.0.0.1:${PORT}/ || exit 1
 
 # 切换到非 root 用户运行
 USER nextjs
